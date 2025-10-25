@@ -1,9 +1,5 @@
 ﻿/* ===== إعادة تهيئة القاعدة ===== */
 
-CREATE DATABASE ElectronicsShop;
-GO
-USE ElectronicsShop;
-GO
 
 /* ===== الجداول (مطابقة للمخطط) ===== */
 CREATE TABLE Customer (
@@ -21,7 +17,6 @@ CREATE TABLE Cart (
     Cart_ID INT IDENTITY PRIMARY KEY,
     Customer_ID INT NOT NULL FOREIGN KEY REFERENCES Customer(Customer_ID),
     Created_At DATETIME NOT NULL DEFAULT GETDATE(),
-    Number_Of_Items INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE Categories (
@@ -185,9 +180,9 @@ INSERT INTO Product (Name, Price, Description, Quantity, Categories_ID, Inventor
 ('Philips Iron Steam',90,'2400W Steam',70,6,3);
 
 /* ===== السلال ===== */
-INSERT INTO Cart (Customer_ID, Number_Of_Items) VALUES
-(1,5),(2,3),(3,2),(4,6),(5,1),(6,4),(7,5),
-(8,2),(9,3),(10,2),(11,4),(12,3),(13,5),(14,2),(15,6);
+INSERT INTO Cart (Customer_ID) VALUES
+(1),(2),(3),(4),(5),(6),(7),
+(8),(9),(10),(11),(12),(13),(14),(15);
 
 /* ===== الطلبات (كلها تشير لمنتجات ضمن المدى 1..60) ===== */
 INSERT INTO Order_Line (Cart_ID, Status, Quantity, Product_ID, Receiver_Name, Receiver_Address) VALUES
