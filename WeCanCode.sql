@@ -1,7 +1,4 @@
-﻿/* ===== إعادة تهيئة القاعدة ===== */
-
-
-/* ===== الجداول (مطابقة للمخطط) ===== */
+﻿
 CREATE TABLE Customer (
     Customer_ID INT IDENTITY PRIMARY KEY,
     First_Name NVARCHAR(50),
