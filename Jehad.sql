@@ -21,27 +21,33 @@ JOIN Shipment_Company s ON sh.Shipment_ID = s.Shipment_ID
 GROUP BY s.[Name]
 ORDER BY Orders_Shipped DESC;
 
---أفضل العملاء للتسويق حسب تقييماته
+-- العملاء الي اعطو تقييم 5 نجوم
 
 SELECT 
     c.First_Name + ' ' + c.Last_Name AS Customer_Name,
-    AVG(r.Rate) AS Avg_Rating_Given,
-    COUNT(r.Product_ID) AS Reviews_Count
+    r.Rate 
 FROM Customer c
 JOIN Review r ON c.Customer_ID = r.Customer_ID
-GROUP BY c.Customer_ID, c.First_Name, c.Last_Name
-HAVING COUNT(r.Product_ID) >= 3 AND AVG(r.Rate) >= 4.5
-ORDER BY Avg_Rating_Given DESC;
+where r.Rate = 5
+ORDER BY r.Rate DESC;
 
--- الشركة الأسرع وأكثر موثوقية
+
+
+--متوسط إنفاق لكل طريقة دفع
 SELECT 
-    s.[Name] AS Shipping_Company,
-    COUNT(sh.Shipping_ID) AS Orders_Shipped,
-    AVG(DATEDIFF(DAY, sh.Ship_Date, sh.Delivery_Date)) AS Avg_Shipping_Days
-FROM Shipping sh
-JOIN Shipment_Company s ON sh.Shipment_ID = s.Shipment_ID
-GROUP BY s.[Name]
-ORDER BY Avg_Shipping_Days ASC;
+    pay.Method,
+    COUNT(*) AS Payment_times,
+    SUM(p.Price * o.Quantity) AS Total_Sales,
+    AVG(p.Price * o.Quantity) AS Avg_Sales
+FROM Payment pay
+JOIN Cart ca ON pay.Cart_ID = ca.Cart_ID
+JOIN Order_Line o ON ca.Cart_ID = o.Cart_ID
+JOIN Product p ON o.Product_ID = p.Product_ID
+GROUP BY pay.[Method]
+ORDER BY Total_Sales DESC;
+
+
+
 
 
 
