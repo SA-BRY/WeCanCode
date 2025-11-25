@@ -49,18 +49,24 @@ GROUP BY p.Product_ID, p.Name, p.Quantity
 ORDER BY Remaining_Stock ASC;
 
 
--- طلبات تصنيف معنين
+
+ --جلب المنتجات التي مبيعاتها أعلى من متوسط مبيعات جميع المنتجات
+
 SELECT 
-    c.Customer_ID,
-    c.First_Name,
-    c.Last_Name
-FROM Customer c
-WHERE EXISTS (
-    SELECT 1
-    FROM Orders o
-    JOIN OrderItem oi ON oi.Order_ID = o.Order_ID
-    JOIN Product p ON p.Product_ID = oi.Product_ID
-    JOIN Category cat ON cat.Category_ID = p.Category_ID
-    WHERE o.Customer_ID = c.Customer_ID
-      AND cat.Category_Name = 'Laptops'
+    p.Product_ID,
+    p.Name,
+    SUM(o.Quantity) AS Total_Sold
+FROM Product p
+JOIN Order_Line o ON p.Product_ID = o.Product_ID
+GROUP BY p.Product_ID, p.Name
+HAVING SUM(o.Quantity) > (
+    SELECT AVG(TotalProductSales)
+    FROM (
+        SELECT 
+            p2.Product_ID,
+            SUM(o2.Quantity) AS TotalProductSales
+        FROM Product p2
+        JOIN Order_Line o2 ON p2.Product_ID = o2.Product_ID
+        GROUP BY p2.Product_ID
+    ) AS ProductSalesTable
 );
