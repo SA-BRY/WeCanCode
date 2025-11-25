@@ -49,4 +49,18 @@ GROUP BY p.Product_ID, p.Name, p.Quantity
 ORDER BY Remaining_Stock ASC;
 
 
-
+-- طلبات تصنيف معنين
+SELECT 
+    c.Customer_ID,
+    c.First_Name,
+    c.Last_Name
+FROM Customer c
+WHERE EXISTS (
+    SELECT 1
+    FROM Orders o
+    JOIN OrderItem oi ON oi.Order_ID = o.Order_ID
+    JOIN Product p ON p.Product_ID = oi.Product_ID
+    JOIN Category cat ON cat.Category_ID = p.Category_ID
+    WHERE o.Customer_ID = c.Customer_ID
+      AND cat.Category_Name = 'Laptops'
+);
