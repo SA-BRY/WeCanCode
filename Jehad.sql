@@ -46,9 +46,21 @@ JOIN Product p ON o.Product_ID = p.Product_ID
 GROUP BY pay.[Method]
 ORDER BY Total_Sales DESC;
 
+--جلب المنتجات التي سعرها أعلى من متوسط سعر الفئة الخاصة بها
 
 
-
+SELECT 
+    p.Product_ID,
+    p.Name,
+    p.Price,
+    c.Category_Name
+FROM Product p
+JOIN Categories c ON p.Categories_ID = c.Categories_ID
+WHERE p.Price > (
+    SELECT AVG(p2.Price)
+    FROM Product p2
+    WHERE p2.Categories_ID = p.Categories_ID
+);
 
 
 
